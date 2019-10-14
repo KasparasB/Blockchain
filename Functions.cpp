@@ -1,7 +1,7 @@
 #include "hash.h"
 #include "Header.h"
 
-Block::Block(uint32_t nIndexIn, const string& sDataIn) : _nIndex(nIndexIn), _sData(sDataIn) {
+Block::Block(uint32_t nIndexIn, const string& sDataIn) : nIndex(nIndexIn), sData(sDataIn) {
 	nNonce = -1;
 	tTime = time(nullptr);
 }
@@ -26,4 +26,16 @@ void Block::MineBlock(uint32_t nDifficulty) {
 	} while (sHash.substr(0, nDifficulty) != str);
 
 	cout << "Block mined: " << sHash << endl;
+}
+
+inline string Block::CalculateHash() const {
+	stringstream ss;
+	ss << nIndex << tTime << sData << nNonce << sPrevHash;
+
+	return sha256(ss.str());
+}
+
+Blockchain::Blockchain() {
+	vChain.emplace_back(Block(0, "Genesis Block"));
+	nDifficulty = 6;
 }

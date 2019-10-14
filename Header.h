@@ -4,11 +4,13 @@
 #include <cstdint>
 #include <vector>
 #include <time.h>
+#include <fstream>
 
 using std::vector;
 using std::string;
 using std::cout;
 using std::endl;
+using std::stringstream;
 
 class Block {
 private:
@@ -17,6 +19,8 @@ private:
 	string sData;
 	string sHash;
 	time_t tTime;
+
+	inline string CalculateHash() const;
 
 public:
 	string sPrevHash;
