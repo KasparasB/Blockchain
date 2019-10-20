@@ -4,7 +4,11 @@
 #include <cstdint>
 #include <vector>
 #include <time.h>
+#include <sstream>
+#include <chrono>
 #include <fstream>
+#include <random>
+#include <functional>
 
 using std::vector;
 using std::string;
@@ -18,16 +22,17 @@ private:
 	int64_t nNonce;
 	string sData;
 	string sHash;
-	time_t tTime;
-
+	time_t timestamp;
 	inline string CalculateHash() const;
 
 public:
-	string sPrevHash;
-	Block(uint32_t nIndexIn, const string& sDataIn);
+	Block(uint32_t index, const string& data);
 	string GetHash();
+	string sPrevHash;
 	void MineBlock(uint32_t nDifficulty);
+	
 };
+
 
 class Blockchain {
 private:
@@ -38,6 +43,27 @@ private:
 public:
 	Blockchain();
 	void AddBlock(Block bNew);
+};
 
+class User {
+private:
+	string name;
+	string public_key;
+	int kappaCoin;
+public:
+	User(string dName = "", string dKey = "", int dBalance = 0) : name{ dName }, public_key{ dKey }, kappaCoin{ dBalance } {};
+
+	void setName(string word) { name = word; };
+	void setKey(string lock) { public_key = lock; };
+	void setKappa(int currency) { kappaCoin = currency; };
+
+	string getName() { return name; };
+	string getKey() { return public_key; };
+	int getKappa() { return kappaCoin; };
+
+	int addKappa(int add) { kappaCoin += add; };
+	int subKappa(int sub) { kappaCoin -= sub; };
 
 };
+
+void readUsers(vector<User> Kappa, int n);
