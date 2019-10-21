@@ -7,7 +7,7 @@ int main()
 
 	vector<User> Kappa;
 
-	void readUsers(Kappa, 1000);
+	readUsers(Kappa, 1000);
 
 	cout << "Mining block 1..." << endl;
 	bChain.AddBlock(Block(1, "Block 1 Data"));

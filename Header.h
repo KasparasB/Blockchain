@@ -66,4 +66,15 @@ public:
 
 };
 
-void readUsers(vector<User> Kappa, int n);
+class Transaction {
+public:
+	int tID;
+	string from;
+	string to;
+	int amount;
+
+	Transaction(int deftID, string dFrom, string dTo, int dAmount) : tID{ deftID }, from{ dFrom }, to{ dTo }, amount{ dAmount }{};
+};
+
+void readUsers(vector<User>& Kappa, int n);
+void createTransaction(int nTransaction, int nUsers, vector<Transaction>& transactions, vector<User> users);

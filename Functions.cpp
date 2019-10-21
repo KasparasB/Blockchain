@@ -52,20 +52,37 @@ void Blockchain::AddBlock(Block bNew)
 	bNew.MineBlock(nDifficulty);
 	vChain.push_back(bNew);
 }
-
 void readUsers(vector<User>& Kappa, int n)
 {
-	auto seed = std::chrono::high_resolution_clock::now().time_since_epoch().count();
-	std::mt19937 mt_rand(seed);
-	//auto real_rand = std::bind(std::uniform_real_distribution<int>(100, 1000000), std::mt19937(seed));
+	std::random_device rd;  //Will be used to obtain a seed for the random number engine
+	std::mt19937 mt(rd());
+	std::uniform_real_distribution<> Skaicius(100, 1000001);
 
 	User temp;
 
 	for (int i = 0; i < n; i++)
 	{
-		
+
 		temp.setName("Vardas" + std::to_string(i));
-		temp.setKey(sha256(temp.getName));
-		temp.setKappa(5000);
+		temp.setKey(sha256(temp.getName()));
+		temp.setKappa(Skaicius(mt));
+
+		Kappa.push_back(temp);
 	}
 }
+
+void createTransaction(int nTransaction, int nUsers, vector<Transaction>& transactions, vector<User> users)
+{
+	std::random_device rd;  //Will be used to obtain a seed for the random number engine
+	std::mt19937 mt(rd());
+	std::uniform_real_distribution<> rAmount(100, 1000001);
+	std::uniform_real_distribution<> rUsers(1, nUsers + 1);
+
+
+	for (int i = 0; i < nTransaction; i++)
+	{
+		Transaction temp = Transaction(i+1, users[rUsers].getKey(), users[rUsers].getKey(),  );
+		transactions.push_back();
+	}
+}
+
