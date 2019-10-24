@@ -73,16 +73,31 @@ void readUsers(vector<User>& Kappa, int n)
 
 void createTransaction(int nTransaction, int nUsers, vector<Transaction>& transactions, vector<User> users)
 {
-	std::random_device rd;  //Will be used to obtain a seed for the random number engine
-	std::mt19937 mt(rd());
-	std::uniform_real_distribution<> rAmount(100, 1000001);
-	std::uniform_real_distribution<> rUsers(1, nUsers + 1);
-
+	
+	//std::uniform_real_distribution<> rAmount(100, 1000001);
+	
+	std::random_device dr;  //Will be used to obtain a seed for the random number engine
+	std::mt19937 tm(dr());
 
 	for (int i = 0; i < nTransaction; i++)
 	{
-		Transaction temp = Transaction(i+1, users[rUsers].getKey(), users[rUsers].getKey(),  );
-		transactions.push_back();
+
+		std::uniform_int_distribution<int> rUsersFrom(1, nUsers-1);
+		std::uniform_int_distribution<int> rUsersTo(1, nUsers-1);
+		
+
+		int from = rUsersFrom(tm);
+		int to = rUsersTo(tm);
+
+		std::uniform_int_distribution<int> Coins(1, users[from].getKappa());
+
+		int kappa = Coins(tm);
+
+		users[from].subKappa(kappa);
+		users[to].addKappa(kappa);
+
+		Transaction temp = Transaction(i+1, users[from].getKey(), users[to].getKey(), kappa );
+		transactions.push_back(temp);
 	}
 }
 

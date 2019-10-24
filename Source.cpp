@@ -6,17 +6,26 @@ int main()
 	Blockchain bChain = Blockchain();
 
 	vector<User> Kappa;
-
+	vector<Transaction> Operations;
 	readUsers(Kappa, 1000);
+	createTransaction(1000, 1000, Operations, Kappa);
 
-	cout << "Mining block 1..." << endl;
-	bChain.AddBlock(Block(1, "Block 1 Data"));
+	string Data = "";
+	int bCount = 0;
+	for (int i = 0; Operations.size() > 0; i++)
+	{
+		int random = rand() % Operations.size();
 
-	cout << "Mining block 2..." << endl;
-	bChain.AddBlock(Block(2, "Block 2 Data"));
+		Data += std::to_string(Operations[random].tID) + "," + Operations[random].from + "," + Operations[random].to + "," + std::to_string(Operations[random].amount);
+		Operations.erase(Operations.begin() + random);
 
-	cout << "Mining block 3..." << endl;
-	bChain.AddBlock(Block(3, "Block 3 Data"));
+		if ( (i+1) % 100 == 0)
+		{
+			bChain.AddBlock(Block(bCount + 1, Data));
+			Data = "";
+			bCount++;
+		}
+	}
 
 	system("PAUSE");
 }

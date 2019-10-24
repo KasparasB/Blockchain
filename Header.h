@@ -61,8 +61,17 @@ public:
 	string getKey() { return public_key; };
 	int getKappa() { return kappaCoin; };
 
-	int addKappa(int add) { kappaCoin += add; };
-	int subKappa(int sub) { kappaCoin -= sub; };
+	void addKappa(int add) { kappaCoin += add;};
+	void subKappa(int sub) {
+		if (kappaCoin - sub < 0)
+		{
+			cout << "Transakcija negalima" << endl;
+		}
+		else
+		{
+			kappaCoin -= sub;
+		}
+	};
 
 };
 
@@ -73,7 +82,10 @@ public:
 	string to;
 	int amount;
 
-	Transaction(int deftID, string dFrom, string dTo, int dAmount) : tID{ deftID }, from{ dFrom }, to{ dTo }, amount{ dAmount }{};
+	Transaction(int deftID, string dFrom, string dTo, int dAmount) : tID{ deftID }, from{ dFrom }, to{ dTo }, amount{ dAmount }
+	{
+	
+	};
 };
 
 void readUsers(vector<User>& Kappa, int n);
