@@ -1,6 +1,10 @@
 # KappaCoin Blockchain
 ***
 
+## Paleidimas
+
+``` g++ -o test Source.cpp Functions.cpp hash.cpp Header.cpp ```
+
 ## Veikimo principas
 
 1. Sukuriamas blockchain'as su Genesis Block'u.
