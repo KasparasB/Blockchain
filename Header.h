@@ -9,6 +9,7 @@
 #include <fstream>
 #include <random>
 #include <functional>
+#include <algorithm>
 
 using std::vector;
 using std::string;
@@ -29,6 +30,7 @@ public:
 	Block(uint32_t index, const string& data);
 	string GetHash();
 	string sPrevHash;
+	int64_t getNonce() { return nNonce; }
 	void MineBlock(uint32_t nDifficulty);
 	
 };
@@ -62,27 +64,25 @@ public:
 	int getKappa() { return kappaCoin; };
 
 	void addKappa(int add) { kappaCoin += add;};
-	void subKappa(int sub) {
-		if (kappaCoin - sub < 0)
-		{
-			cout << "Transakcija negalima" << endl;
-		}
-		else
-		{
-			kappaCoin -= sub;
-		}
-	};
+	void subKappa(int sub) { kappaCoin -= sub;};
 
 };
 
 class Transaction {
 public:
-	int tID;
+	string tID;
 	string from;
 	string to;
 	int amount;
 
-	Transaction(int deftID, string dFrom, string dTo, int dAmount) : tID{ deftID }, from{ dFrom }, to{ dTo }, amount{ dAmount }
+	int fromID;
+	int toID;
+
+
+	int getFromID() { return fromID;};
+	int getToID() { return toID; };
+
+	Transaction(string deftID, string dFrom, string dTo, int dAmount, int dFromID, int dToID) : tID{ deftID }, from{ dFrom }, to{ dTo }, amount{ dAmount }, fromID{dFromID}, toID{dToID}
 	{
 	
 	};

@@ -23,15 +23,21 @@ void Block::MineBlock(uint32_t nDifficulty) {
 	do {
 		nNonce++;
 		sHash = CalculateHash();
-	} while (sHash.substr(0, nDifficulty) != str);
-
-	cout << "Block mined: " << sHash << endl;
+	} while (sHash.substr(0, nDifficulty) != str && nNonce < 100000); // pridedamas nonce reikalavimas
+	if (nNonce < 100000)
+	{
+		//cout << "Block mined: " << sHash << " " << nNonce << endl; //Spausdinam nonce, kad patikrinti ar maziau uz 100k
+	}
+	else {
+		sHash = "1"; // priskiriamas 1, reiskia, kad buvo nespeta iskasti bloko
+		cout << "Failed to mine a block: " << nNonce << endl;
+	}
 }
 
 inline string Block::CalculateHash() const {
 	string hashable = "";
 
-	hashable = std::to_string(nIndex) + std::to_string(nNonce) + sData + sHash + std::to_string(timestamp);
+	hashable = std::to_string(nIndex) + std::to_string(nNonce) + sData + std::to_string(timestamp);
 
 	return sha256(hashable);
 }
@@ -44,6 +50,9 @@ Block Blockchain::GetLastBlock() const
 Blockchain::Blockchain() {
 	vChain.emplace_back(Block(0, "Genesis Block"));
 	nDifficulty = 3;
+	//Mineblock();
+	//vChain[0].
+	
 }
 
 void Blockchain::AddBlock(Block bNew)
@@ -73,31 +82,34 @@ void readUsers(vector<User>& Kappa, int n)
 
 void createTransaction(int nTransaction, int nUsers, vector<Transaction>& transactions, vector<User> users)
 {
-	
+
 	//std::uniform_real_distribution<> rAmount(100, 1000001);
-	
+
 	std::random_device dr;  //Will be used to obtain a seed for the random number engine
 	std::mt19937 tm(dr());
+	
+	string Data = ""; // hashuojama transakcijos informacija
 
 	for (int i = 0; i < nTransaction; i++)
 	{
-
-		std::uniform_int_distribution<int> rUsersFrom(1, nUsers-1);
-		std::uniform_int_distribution<int> rUsersTo(1, nUsers-1);
 		
+		std::uniform_int_distribution<int> rUsersFrom(1, nUsers - 1);
+		std::uniform_int_distribution<int> rUsersTo(1, nUsers - 1);
+
 
 		int from = rUsersFrom(tm);
 		int to = rUsersTo(tm);
 
-		std::uniform_int_distribution<int> Coins(1, users[from].getKappa());
+		std::uniform_int_distribution<int> Coins(1, 1000001);
 
-		int kappa = Coins(tm);
+		int kappa = Coins(tm); // valiuta
 
 		users[from].subKappa(kappa);
 		users[to].addKappa(kappa);
 
-		Transaction temp = Transaction(i+1, users[from].getKey(), users[to].getKey(), kappa );
+		Data = sha256(users[from].getKey() + "," + users[to].getKey() + "," + std::to_string(kappa));
+
+		Transaction temp = Transaction(Data, users[from].getKey(), users[to].getKey(), kappa, from, to);
 		transactions.push_back(temp);
 	}
 }
-
