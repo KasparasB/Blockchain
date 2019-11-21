@@ -10,11 +10,13 @@ int main()
 	vector<User> Kappa;
 	vector<Transaction> Operations;
 	readUsers(Kappa, 1000);
-	createTransaction(1000, 1000, Operations, Kappa);
+	createTransaction(500, 1000, Operations, Kappa);
 	int count = 0; // Skaiciuojamas tikslus validziu transakciju kiekis
 	vector<string> Data; // I si kintamaji dedami validzios transakcijos duomenys
 	string DataT = ""; //Test data, kad skirta transakcijos patikrinimui
 	int bCount = 0;
+	vector<string> merkle;
+
 
 	vector<Transaction> OperationsFake = Operations;
 
@@ -42,7 +44,9 @@ int main()
 				{
 
 					OperationsFake.erase(OperationsFake.begin() + random);
+					Operations.erase(Operations.begin() + random);
 					createTransaction(1, Kappa.size(), OperationsFake, Kappa);
+					createTransaction(1, Kappa.size(), Operations, Kappa);
 					continue;
 				}
 
@@ -58,7 +62,7 @@ int main()
 				//OperationsFake.erase(OperationsFake.begin() + random);
 			}
 			Data.push_back(temp);
-			PossibleBlock.push_back(Block(y + 1, Data[y]));
+			PossibleBlock.push_back(Block(bCount + 1, Data[y]));
 			testChain.AddBlock(PossibleBlock[y]);
 			
 		}
@@ -71,14 +75,17 @@ int main()
 			if (PossibleBlock[randomBlock].GetHash() != "1")
 			{
 				std::sort(&randomArray[randomBlock][0], &randomArray[randomBlock][100]);
-				//bChain.AddBlock(Block(bCount + 1, Data[randomBlock]));
-				bChain.AddBlock(PossibleBlock[randomBlock]);
-				cout << "Block mined: " << PossibleBlock[randomBlock].GetHash() << endl;
 				for (int x = 0; x < 100; x++)
 				{
-					Operations.erase(Operations.begin() + (randomArray[randomBlock][x]-sk));
+					merkle.push_back(Operations[randomArray[randomBlock][x] - sk].getID());
+					Operations.erase(Operations.begin() + (randomArray[randomBlock][x] - sk));
 					sk++;
 				}
+				//bChain.AddBlock(Block(bCount + 1, Data[randomBlock]));
+				bChain.AddBlock(PossibleBlock[randomBlock]);
+				bChain.addMerkle(bCount+1, merkle);
+			//	cout << "Block mined. " << PossibleBlock[randomBlock].GetHash() << endl;
+				
 				search = false;
 				Data.clear();
 				PossibleBlock.clear();
@@ -86,7 +93,7 @@ int main()
 			}
 			//PossibleBlock.erase(PossibleBlock.begin() + randomBlock);
 		}
-		
+		bCount++;
 
 		//Operations.erase(Operations.begin() + random);
 
@@ -101,6 +108,7 @@ int main()
 			bCount++;
 		}*/
 	}
+	bChain.printBlockChain();
 
 
 	system("PAUSE");

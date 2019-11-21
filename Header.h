@@ -25,6 +25,9 @@ private:
 	string sHash;
 	time_t timestamp;
 	inline string CalculateHash() const;
+	vector<string> IDs;
+	void MerkleRoot();
+	string Merkle;
 
 public:
 	Block(uint32_t index, const string& data);
@@ -32,6 +35,8 @@ public:
 	string sPrevHash;
 	int64_t getNonce() { return nNonce; }
 	void MineBlock(uint32_t nDifficulty);
+	void setIDs(vector<string> Id) { IDs = Id; MerkleRoot(); };
+	void printBlock();
 	
 };
 
@@ -45,6 +50,8 @@ private:
 public:
 	Blockchain();
 	void AddBlock(Block bNew);
+	void printBlockChain();
+	void addMerkle(int Index, vector<string>IDs);
 };
 
 class User {
@@ -78,7 +85,7 @@ public:
 	int fromID;
 	int toID;
 
-
+	string getID() { return tID; };
 	int getFromID() { return fromID;};
 	int getToID() { return toID; };
 
